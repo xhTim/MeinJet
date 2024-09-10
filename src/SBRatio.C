@@ -105,4 +105,100 @@ void SBRatio(int baseline_Jahr = 22, int test_Jahr = 23)
         }
     }
     cBkg_2->SaveAs(Form("../Figuren/year_ratios/Background_canvas2_20%dto20%d.pdf", test_Jahr, baseline_Jahr));
+
+    TCanvas *cSignal_ind_1_1 = new TCanvas("cSignal_ind_1_1", "", 800, 1200);
+    cSignal_ind_1_1->Divide(2, 5); // Divide canvas into 2 columns and 5 rows
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            cSignal_ind_1_1->cd(i * 2 + j + 1);
+            hSignal_phi_1[i][j]->Draw("ehist");
+        }
+    }
+    cSignal_ind_1_1->SaveAs(Form("../Figuren/S_und_B/Signal_canvas1_20%d.pdf", baseline_Jahr));
+
+    TCanvas *cSignal_ind_1_2 = new TCanvas("cSignal_ind_1_2", "", 800, 1200);
+    cSignal_ind_1_2->Divide(2, 5);
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            cSignal_ind_1_2->cd(i * 2 + j + 1);
+            hSignal_phi_1[i + 5][j]->Draw("ehist");
+        }
+    }
+    cSignal_ind_1_2->SaveAs(Form("../Figuren/S_und_B/Signal_canvas2_20%d.pdf", baseline_Jahr));
+
+    TCanvas *cSignal_ind_2_1 = new TCanvas("cSignal_ind_2_1", "", 800, 1200);
+    cSignal_ind_2_1->Divide(2, 5);
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            cSignal_ind_2_1->cd(i * 2 + j + 1);
+            hSignal_phi_2[i][j]->Draw("ehist");
+        }
+    }
+    cSignal_ind_2_1->SaveAs(Form("../Figuren/S_und_B/Signal_canvas1_20%d.pdf", test_Jahr));
+
+    TCanvas *cSignal_ind_2_2 = new TCanvas("cSignal_ind_2_2", "", 800, 1200);
+    cSignal_ind_2_2->Divide(2, 5);
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            cSignal_ind_2_2->cd(i * 2 + j + 1);
+            hSignal_phi_2[i + 5][j]->Draw("ehist");
+        }
+    }
+    cSignal_ind_2_2->SaveAs(Form("../Figuren/S_und_B/Signal_canvas2_20%d.pdf", test_Jahr));
+
+    TCanvas *cBkg_ind_1_1 = new TCanvas("cBkg_ind_1_1", "", 800, 1200);
+    cBkg_ind_1_1->Divide(2, 5);
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            cBkg_ind_1_1->cd(i * 2 + j + 1);
+            hBkg_phi_1[i][j]->Draw("ehist");
+        }
+    }
+    cBkg_ind_1_1->SaveAs(Form("../Figuren/S_und_B/Background_canvas1_20%d.pdf", baseline_Jahr));
+
+    TCanvas *cBkg_ind_1_2 = new TCanvas("cBkg_ind_1_2", "", 800, 1200);
+    cBkg_ind_1_2->Divide(2, 5);
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            cBkg_ind_1_2->cd(i * 2 + j + 1);
+            hBkg_phi_1[i + 5][j]->Draw("ehist");
+        }
+    }
+    cBkg_ind_1_2->SaveAs(Form("../Figuren/S_und_B/Background_canvas2_20%d.pdf", baseline_Jahr));
+
+    TCanvas *cBkg_ind_2_1 = new TCanvas("cBkg_ind_2_1", "", 800, 1200);
+    cBkg_ind_2_1->Divide(2, 5);
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            cBkg_ind_2_1->cd(i * 2 + j + 1);
+            hBkg_phi_2[i][j]->Draw("ehist");
+        }
+    }
+    cBkg_ind_2_1->SaveAs(Form("../Figuren/S_und_B/Background_canvas1_20%d.pdf", test_Jahr));
+
+    TCanvas *cBkg_ind_2_2 = new TCanvas("cBkg_ind_2_2", "", 800, 1200);
+    cBkg_ind_2_2->Divide(2, 5);
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            cBkg_ind_2_2->cd(i * 2 + j + 1);
+            hBkg_phi_2[i + 5][j]->Draw("ehist");
+        }
+    }
+    cBkg_ind_2_2->SaveAs(Form("../Figuren/S_und_B/Background_canvas2_20%d.pdf", test_Jahr));
 }

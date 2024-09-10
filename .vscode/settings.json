@@ -1,0 +1,7 @@
+{
+        "files.associations": {
+                "DrawFlow.C": "cpp",
+                "TakeRatio.C": "cpp",
+                "SBRatio.C": "cpp"
+        }
+}
