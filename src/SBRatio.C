@@ -17,8 +17,8 @@ void SBRatio(int baseline_Jahr = 22, int test_Jahr = 23)
 
     cout << "Baseline: 20" << baseline_Jahr << " Run " << num_run << endl
          << "Test: 20" << test_Jahr << " Run " << num_run << endl;
-    TFile *file_1 = new TFile(Form("../Dokumente/ana_run%d_allNch_20%d.root", num_run, baseline_Jahr), "read");
-    TFile *file_2 = new TFile(Form("../Dokumente/ana_run%d_allNch_20%d.root", num_run, test_Jahr), "read");
+    TFile *file_1 = new TFile(Form("../Dokumente/ana_run%d_allNch_20%d_newBkg_for_high_Nch.root", num_run, baseline_Jahr), "read");
+    TFile *file_2 = new TFile(Form("../Dokumente/ana_run%d_allNch_20%d_newBkg_for_high_Nch.root", num_run, test_Jahr), "read");
 
     int ptbinbounds[2] = {3, 5};
     float ptname[2] = {0.3, 0.5};
