@@ -3,6 +3,7 @@
                 "DrawFlow.C": "cpp",
                 "TakeRatio.C": "cpp",
                 "SBRatio.C": "cpp",
-                "SBRatio_char.C": "cpp"
+                "SBRatio_char.C": "cpp",
+                "DrawVn.C": "cpp"
         }
 }
