@@ -2,6 +2,7 @@
         "files.associations": {
                 "DrawFlow.C": "cpp",
                 "TakeRatio.C": "cpp",
-                "SBRatio.C": "cpp"
+                "SBRatio.C": "cpp",
+                "SBRatio_char.C": "cpp"
         }
 }
