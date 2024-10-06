@@ -4,6 +4,9 @@
                 "TakeRatio.C": "cpp",
                 "SBRatio.C": "cpp",
                 "SBRatio_char.C": "cpp",
-                "DrawVn.C": "cpp"
+                "DrawVn.C": "cpp",
+                "TH1toCanvas.C": "cpp",
+                "TH1DtoCanvas.C": "cpp",
+                "Statistics.C": "cpp"
         }
 }

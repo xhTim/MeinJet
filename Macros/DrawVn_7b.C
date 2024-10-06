@@ -1,22 +1,18 @@
 #include "../include/headers.h"
 
-void DrawFlow(){
-    TH2D* hSignal[10][2];//Ntrk,pt
-    TH2D* hBkg[10][2];
-    //TH2D* h2DCorr[5][2];
-    TH1D* h1DFlow[10][2];
-    //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/ana_run3.root","READ");
-    //TFile* f_bkg= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/Bkg_highMult_jets_run3.root","READ");
-    //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/new_default_complete_vn.root","READ");
-    //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/ana_run3_allNch.root","READ");
-    TFile* f= new TFile("../Dokumente/ana_run3_allNch_2024_Jet275_newCut_newBkg_for_high_Nch.root","READ");
-    //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/output_parkersbin.root","READ");
-    //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/output_parkersbin_newBkg_for_high_Nch.root","READ");
-    
+void DrawVn_7b(TString era = "22C"){
+    TH2D* hSignal[6][2];//Ntrk,pt
+    TH2D* hBkg[6][2];
+    TH1D* h1DFlow[6][2];
+    TH1D* hBinDist[6];
+
+    TFile *f = new TFile("../Dokumente/ana_run3_allNch_20" + era + "_newBkg_for_high_Nch.root", "READ");
+    TFile *fstat = new TFile("../Dokumente/ana_run3_allNch_20" + era + ".root", "READ");
+
     //int   trackbinbounds[5]= {76,78,80,81,82};
     int ptbinbounds[2]={3,5};
-    const int   trackbinbounds[10]         = { 0,20,30,40,50,59,66,76,83,78};
-    const int   trackbinboundsUpper[10]    = {20,30,40,50,59,66,76,83,1000,1000};
+    const int   trackbinbounds[6]         = {41,50,59,66,76,83};
+    const int   trackbinboundsUpper[6]    = {50,59,66,76,83,1000};
     
     float ptname[2]={0.3,0.5};
     int YPlo=28;
@@ -24,12 +20,21 @@ void DrawFlow(){
     TH1D* hJetPass = (TH1D*)f->Get("hJet_Pass550");
     //TH1D* hJetPass = (TH1D*)f->Get("hJet_Pass550_hltCor");
     
+    double mAve_Nch[6];
+    double mAve_Nch_err[6];
+    double mFit_par[2][5][6];
+    double mFit_par_err[2][5][6];
+
     //for(int i=0;i<5;i++){
-    for(int i=0;i<10;i++){
+    for(int i=0;i<6;i++){
+        hBinDist[i]=(TH1D*)fstat->Get(Form("hBinDist_unc_%d",i+1)); 
+        mAve_Nch[i]=hBinDist[i]->GetMean();
+        mAve_Nch_err[i]=0.0;
+
         for(int j=0;j<2;j++){
             //hSignal[i][j]=(TH2D*)f->Get(Form("hSigS_Cor_%d_to_1000_and_%d_to_30_w_PU_1",trackbinbounds[i],ptbinbounds[j]));
             //hBkg[i][j]=(TH2D*)f_bkg->Get(Form("hBckS_Cor_%d_to_1000_and_%d_to_30_w_PU_1",trackbinbounds[i],ptbinbounds[j]));
-            
+
             hSignal[i][j]=(TH2D*)f->Get(Form("hSigS_Cor_%d_to_%d_and_%d_to_30_w_PU_1",trackbinbounds[i],trackbinboundsUpper[i],ptbinbounds[j]));
             hBkg[i][j]=(TH2D*)f->Get(Form("hBckS_Cor_%d_to_%d_and_%d_to_30_w_PU_1",trackbinbounds[i],trackbinboundsUpper[i],ptbinbounds[j]));
             
@@ -57,14 +62,55 @@ void DrawFlow(){
             func1.SetParameter(4, 0.1);
             func1.SetParameter(5, 0.1);
             h1DFlow[i][j]->Fit(&func1, "m E q");
-            
+
+            for(int ip=0;ip<5;ip++){
+                mFit_par[j][ip][i]=func1.GetParameter(ip+1);
+                mFit_par_err[j][ip][i]=func1.GetParError(ip+1);
+                mFit_par_err[j][ip][i]*=sqrt(2); 
+            } 
+
             // Set the histogram title
             //h1DFlow[i][j]->SetTitle(Form("Nch>%d, %.2f<jT<3 GeV/c",trackbinbounds[i],ptname[j]));
             h1DFlow[i][j]->SetTitle(Form("%d<Nch<%d, %.2f<jT<3 GeV/c",trackbinbounds[i],trackbinboundsUpper[i],ptname[j]));
              
         }
     }
-    
+
+    int color[5]={632,419,600,800,616};
+
+    TGraphErrors* gVn[2][5];
+    for(int j=0;j<2;j++){
+        for(int ip=0;ip<5;ip++){
+            gVn[j][ip]=new TGraphErrors(6,mAve_Nch,mFit_par[j][ip],mAve_Nch_err,mFit_par_err[j][ip]);
+            gVn[j][ip]->SetMarkerStyle(20);
+            gVn[j][ip]->SetMarkerSize(0.8);
+            gVn[j][ip]->SetLineColor(color[ip]);
+            gVn[j][ip]->SetMarkerColor(color[ip]);
+        }
+    }
+
+    TLegend *leg = new TLegend(.7, .15, .85, .35, "");
+    leg->AddEntry(gVn[0][0], "n=1");
+    leg->AddEntry(gVn[0][1], "n=2");
+    leg->AddEntry(gVn[0][2], "n=3");
+
+    TLine* l1=new TLine(9.0,0.0,90.0,0.0);
+    TCanvas* cVn=new TCanvas("cVn","cVn",600,500);
+    gVn[0][1]->Draw("AP");
+    gVn[0][1]->SetTitle("2024 new trigger");
+    gVn[0][1]->GetXaxis()->SetTitle("N_{ch}^{j}");
+    gVn[0][1]->GetXaxis()->SetRange(5,95); 
+    gVn[0][1]->GetYaxis()->SetTitle("V^{*}_{n#Delta}{2,|#Delta#eta^{*}|>2}"); 
+    gVn[0][1]->GetYaxis()->SetTitleOffset(1.2); 
+    gVn[0][1]->SetMaximum(0.1);
+    gVn[0][1]->SetMinimum(-0.27);
+    gVn[0][0]->Draw("P");
+    gVn[0][2]->Draw("P");
+    l1->Draw("same");
+    leg->Draw("same");
+    cVn->SaveAs("../Figuren/Vn/Vn_vs_Nch_20" + era + ".pdf");
+
+    /* 
     TCanvas *c1 = new TCanvas("canvas", "Fourier Series Fits", 800, 1200);
     c1->Divide(2, 5); // Divide canvas into 2 columns and 5 rows
     for(int i=0;i<5;i++){
@@ -73,7 +119,7 @@ void DrawFlow(){
             h1DFlow[i][j]->Draw();
         }
     } 
-    c1->SaveAs("../Figuren/1DFlow/Flow_run3_allNch_2024_Jet275_newCut_1.pdf");
+    c1->SaveAs("/Users/xl155/Documents/JetFlow_Run3_data/Flow_run3_allNch_2023_2024.pdf(");
     //c1->SaveAs("/Users/xl155/Documents/JetFlow_Run3_data/Flow_run2_unc_new.pdf(");
 
     TCanvas *c2 = new TCanvas("canvas", "Fourier Series Fits", 800, 1200);
@@ -84,26 +130,9 @@ void DrawFlow(){
             h1DFlow[i+5][j]->Draw();
         }
     } 
-    c2->SaveAs("../Figuren/1DFlow/Flow_run3_allNch_2024_Jet275_newCut_2.pdf)");
+    c2->SaveAs("/Users/xl155/Documents/JetFlow_Run3_data/Flow_run3_allNch_2023_2024.pdf)");
     //c2->SaveAs("/Users/xl155/Documents/JetFlow_Run3_data/Flow_run2_unc_new.pdf)");
-    
-    
-    //TFile* fout= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/2DCorr_run2_PG_ana_eta_phi_bw.root","RECREATE");
-    //TFile* fout= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/2DCorr_run3.root","RECREATE");
-    // TFile* fout= new TFile("../Results/JetFlow_Run2_data/1DFlow_run2_allNch.root","RECREATE");
-    //TFile* fout= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/1DFlow_run2_unc_new.root","RECREATE");
-    
-    //for(int i=0;i<5;i++){
-    // for(int i=0;i<10;i++){
-    //     for(int j=0;j<2;j++){
-    //         //h2DCorr[i][j]->Write();
-    //         h1DFlow[i][j]->Write();
-    //     }
-    // }
-
+    */
     f->Close();
     delete f;
-    // fout->Close();
-    // delete fout;
-
 }

@@ -1,10 +1,10 @@
 #include "../include/headers.h"
 
-void DrawFlow(){
-    TH2D* hSignal[10][2];//Ntrk,pt
-    TH2D* hBkg[10][2];
+void DrawFlow_7b(){
+    TH2D* hSignal[6][2];//Ntrk,pt
+    TH2D* hBkg[6][2];
     //TH2D* h2DCorr[5][2];
-    TH1D* h1DFlow[10][2];
+    TH1D* h1DFlow[6][2];
     //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/ana_run3.root","READ");
     //TFile* f_bkg= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/Bkg_highMult_jets_run3.root","READ");
     //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/new_default_complete_vn.root","READ");
@@ -15,8 +15,8 @@ void DrawFlow(){
     
     //int   trackbinbounds[5]= {76,78,80,81,82};
     int ptbinbounds[2]={3,5};
-    const int   trackbinbounds[10]         = { 0,20,30,40,50,59,66,76,83,78};
-    const int   trackbinboundsUpper[10]    = {20,30,40,50,59,66,76,83,1000,1000};
+    const int   trackbinbounds[6]         = {41,50,59,66,76,83};
+    const int   trackbinboundsUpper[6]    = {50,59,66,76,83,1000};
     
     float ptname[2]={0.3,0.5};
     int YPlo=28;
@@ -25,7 +25,7 @@ void DrawFlow(){
     //TH1D* hJetPass = (TH1D*)f->Get("hJet_Pass550_hltCor");
     
     //for(int i=0;i<5;i++){
-    for(int i=0;i<10;i++){
+    for(int i=0;i<6;i++){
         for(int j=0;j<2;j++){
             //hSignal[i][j]=(TH2D*)f->Get(Form("hSigS_Cor_%d_to_1000_and_%d_to_30_w_PU_1",trackbinbounds[i],ptbinbounds[j]));
             //hBkg[i][j]=(TH2D*)f_bkg->Get(Form("hBckS_Cor_%d_to_1000_and_%d_to_30_w_PU_1",trackbinbounds[i],ptbinbounds[j]));
@@ -78,7 +78,7 @@ void DrawFlow(){
 
     TCanvas *c2 = new TCanvas("canvas", "Fourier Series Fits", 800, 1200);
     c2->Divide(2, 5); // Divide canvas into 2 columns and 5 rows
-    for(int i=0;i<5;i++){
+    for(int i=0;i<1;i++){
         for(int j=0;j<2;j++){
             c2->cd(i*2+j+1);
             h1DFlow[i+5][j]->Draw();

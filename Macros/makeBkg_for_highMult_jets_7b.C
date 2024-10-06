@@ -1,15 +1,15 @@
-void makeBkg_for_highMult_jets(){
+void makeBkg_for_highMult_jets_7b(){
     gRandom->SetSeed(0);
     //int trackbinbounds[5]= {76,78,80,81,82};
     int ptbinbounds[2]={3,5};
-    const int   trackbinbounds[10]         = { 0,20,30,40,50,59,66,76,83,78};
-    const int   trackbinboundsUpper[10]    = {20,30,40,50,59,66,76,83,1000,1000};
-    int trackbin =10;
+    const int   trackbinbounds[6]         = {41,50,59,66,76,83};
+    const int   trackbinboundsUpper[6]    = {50,59,66,76,83,1000};
+    int trackbin =6;
     int ptbin=2;
 
-    TH2D* hSignal[10][2];//Ntrk,pt
-    TH2D* hBckrndShiftedCor[10][2];
-    TH2D* hEPDrawCor[10][2];
+    TH2D* hSignal[6][2];//Ntrk,pt
+    TH2D* hBckrndShiftedCor[6][2];
+    TH2D* hEPDrawCor[6][2];
     TH2D* hPairs;
     TH1D* hJetPass;
     //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/ana_run3.root","READ");
@@ -20,7 +20,7 @@ void makeBkg_for_highMult_jets(){
     hPairs=(TH2D*)f->Get("hPairs");
     hJetPass = (TH1D*)f->Get("hJet_Pass550");
     
-    for(int i=0;i<10;i++){
+    for(int i=0;i<6;i++){
         for(int j=0;j<2;j++){
             hSignal[i][j]=(TH2D*)f->Get(Form("hSigS_Cor_%d_to_%d_and_%d_to_30_w_PU_1",trackbinbounds[i],trackbinboundsUpper[i],ptbinbounds[j]));
             hSignal[i][j]->SetName(Form("hSigS_Cor_%d_to_%d_and_%d_to_30_w_PU_1",trackbinbounds[i],trackbinboundsUpper[i],ptbinbounds[j]));
@@ -77,7 +77,7 @@ void makeBkg_for_highMult_jets(){
     //TFile* fout= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/output_parkersbin_newBkg_for_high_Nch.root","RECREATE");
     TFile* fout= new TFile("../Dokumente/ana_run3_allNch_2024_Jet275_newCut_newBkg_for_high_Nch.root","RECREATE");
     
-    for(int i=0;i<10;i++){
+    for(int i=0;i<6;i++){
         for(int j=0;j<2;j++){
             hBckrndShiftedCor[i][j]->Write();
             hSignal[i][j]->Write();

@@ -1,0 +1,6 @@
+{
+        "files.associations": {
+                "Draw2DCorr.C": "cpp",
+                "TH1toCanvas.C": "cpp"
+        }
+}
