@@ -109,6 +109,12 @@ void DrawVn_7b(TString era = "22C"){
     l1->Draw("same");
     leg->Draw("same");
     cVn->SaveAs("../Figuren/Vn/Vn_vs_Nch_20" + era + ".pdf");
+    
+    TFile *fOut = new TFile("../Results/Vn/Vn_vs_Nch_20" + era + ".root", "recreate");
+    gVn[0][0]->Write("V1");
+    gVn[0][1]->Write("V2");
+    gVn[0][2]->Write("V3");
+    fOut->Close();
 
     /* 
     TCanvas *c1 = new TCanvas("canvas", "Fourier Series Fits", 800, 1200);
