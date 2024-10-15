@@ -10,6 +10,7 @@
                 "Statistics.C": "cpp",
                 "QA.C": "cpp",
                 "TGEtoCanvas.C": "cpp",
-                "Vn.C": "cpp"
+                "Vn.C": "cpp",
+                "Run2Vn.C": "cpp"
         }
 }

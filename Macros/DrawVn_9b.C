@@ -1,22 +1,22 @@
 #include "../include/headers.h"
 
-void DrawVn(TString era = "22C"){
-    TH2D* hSignal[10][2];//Ntrk,pt
-    TH2D* hBkg[10][2];
-    TH1D* h1DFlow[10][2];
-    TH1D* hBinDist[10];
+void DrawVn_9b(TString era = "22C"){
+    TH2D* hSignal[9][2];//Ntrk,pt
+    TH2D* hBkg[9][2];
+    TH1D* h1DFlow[9][2];
+    TH1D* hBinDist[9];
 
     //TFile *f = new TFile("../Dokumente/ana_run3_allNch_20" + era + "_newBkg_for_high_Nch.root", "READ");
     //TFile *fstat = new TFile("../Dokumente/ana_run3_allNch_20" + era + ".root", "READ");
-    //TFile *f = new TFile("../Dokumente/output_run2_parkersbin_newBkg_for_high_Nch.root", "READ");
-    //TFile *fstat = new TFile("../Dokumente/output_run2_parkersbin.root", "READ");
-    TFile *f = new TFile("../Dokumente/ana_run2_allNch_MC_newBkg_for_high_Nch.root", "READ");
-    TFile *fstat = new TFile("../Dokumente/ana_run2_allNch_MC.root", "READ");
+    TFile *f = new TFile("../Dokumente/output_run2_parkersbin_newBkg_for_high_Nch.root", "READ");
+    TFile *fstat = new TFile("../Dokumente/output_run2_parkersbin.root", "READ");
+    //TFile *f = new TFile("../Dokumente/ana_run2_allNch_MC_newBkg_for_high_Nch.root", "READ");
+    //TFile *fstat = new TFile("../Dokumente/ana_run2_allNch_MC.root", "READ");
 
     //int   trackbinbounds[5]= {76,78,80,81,82};
     int ptbinbounds[2]={3,5};
-    const int   trackbinbounds[10]         = { 0,20,30,40,50,59,66,76,83,78};
-    const int   trackbinboundsUpper[10]    = {20,30,40,50,59,66,76,83,1000,1000};
+    const int   trackbinbounds[9]         = { 0,20,30,40,50,59,66,76,83};
+    const int   trackbinboundsUpper[9]    = {20,30,40,50,59,66,76,83,1000};
     
     float ptname[2]={0.3,0.5};
     int YPlo=28;
@@ -24,14 +24,14 @@ void DrawVn(TString era = "22C"){
     TH1D* hJetPass = (TH1D*)f->Get("hJet_Pass550");
     //TH1D* hJetPass = (TH1D*)f->Get("hJet_Pass550_hltCor");
     
-    double mAve_Nch[10];
-    double mAve_Nch_err[10];
-    double mFit_par[2][5][10];
-    double mFit_par_err[2][5][10];
+    double mAve_Nch[9];
+    double mAve_Nch_err[9];
+    double mFit_par[2][5][9];
+    double mFit_par_err[2][5][9];
 
     //for(int i=0;i<5;i++){
-    for(int i=0;i<10;i++){
-        hBinDist[i]=(TH1D*)fstat->Get(Form("hBinDist_cor_%d",i+1)); 
+    for(int i=0;i<9;i++){
+        hBinDist[i]=(TH1D*)fstat->Get(Form("hBinDist_unc_%d",i+1)); 
         mAve_Nch[i]=hBinDist[i]->GetMean();
         mAve_Nch_err[i]=0.0;
 
@@ -85,7 +85,7 @@ void DrawVn(TString era = "22C"){
     TGraphErrors* gVn[2][5];
     for(int j=0;j<2;j++){
         for(int ip=0;ip<5;ip++){
-            gVn[j][ip]=new TGraphErrors(10,mAve_Nch,mFit_par[j][ip],mAve_Nch_err,mFit_par_err[j][ip]);
+            gVn[j][ip]=new TGraphErrors(9,mAve_Nch,mFit_par[j][ip],mAve_Nch_err,mFit_par_err[j][ip]);
             gVn[j][ip]->SetMarkerStyle(20);
             gVn[j][ip]->SetMarkerSize(0.8);
             gVn[j][ip]->SetLineColor(color[ip]);
