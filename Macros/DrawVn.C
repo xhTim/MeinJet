@@ -8,14 +8,14 @@ void DrawVn(TString era = "22C"){
 
     //TFile *f = new TFile("../Dokumente/ana_run3_allNch_20" + era + "_newBkg_for_high_Nch.root", "READ");
     //TFile *fstat = new TFile("../Dokumente/ana_run3_allNch_20" + era + ".root", "READ");
-    //TFile *f = new TFile("../Dokumente/output_run2_parkersbin_newBkg_for_high_Nch.root", "READ");
-    //TFile *fstat = new TFile("../Dokumente/output_run2_parkersbin.root", "READ");
-    TFile *f = new TFile("../Dokumente/ana_run2_allNch_MC_newBkg_for_high_Nch.root", "READ");
-    TFile *fstat = new TFile("../Dokumente/ana_run2_allNch_MC.root", "READ");
+    //TFile *f = new TFile("../Dokumente/ana_run2_allNch_MC_newBkg_for_high_Nch.root", "READ");
+    //TFile *fstat = new TFile("../Dokumente/ana_run2_allNch_MC.root", "READ");
+    TFile *f = new TFile("../Dokumente/ana_corrected_hlt500_newBkg.root", "READ");
+    TFile *fstat = new TFile("../Dokumente/ana_corrected_hlt500.root", "READ");
 
     //int   trackbinbounds[5]= {76,78,80,81,82};
     int ptbinbounds[2]={3,5};
-    const int   trackbinbounds[10]         = { 0,20,30,40,50,59,66,76,83,78};
+    const int   trackbinbounds[10]         = { 0,20,30,40,50,59,66,76,83,76};
     const int   trackbinboundsUpper[10]    = {20,30,40,50,59,66,76,83,1000,1000};
     
     float ptname[2]={0.3,0.5};
@@ -98,7 +98,7 @@ void DrawVn(TString era = "22C"){
     leg->AddEntry(gVn[0][1], "n=2");
     leg->AddEntry(gVn[0][2], "n=3");
 
-    TLine* l1=new TLine(9.0,0.0,90.0,0.0);
+    TLine* l1=new TLine(12.0,0.0,103.0,0.0);
     TCanvas* cVn=new TCanvas("cVn","cVn",600,500);
     gVn[0][1]->Draw("AP");
     gVn[0][1]->SetTitle("Run 2");
@@ -113,6 +113,7 @@ void DrawVn(TString era = "22C"){
     l1->Draw("same");
     leg->Draw("same");
     cVn->SaveAs("../Figuren/Vn/Vn_vs_Nch_20" + era + ".pdf");
+    cVn->SaveAs("../Figuren/Vn/Vn_vs_Nch_20" + era + ".png");
 
     TFile *fOut = new TFile("../Results/Vn/Vn_vs_Nch_20" + era + ".root", "recreate");
     gVn[0][0]->Write("V1");

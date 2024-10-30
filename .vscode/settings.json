@@ -11,6 +11,7 @@
                 "QA.C": "cpp",
                 "TGEtoCanvas.C": "cpp",
                 "Vn.C": "cpp",
-                "Run2Vn.C": "cpp"
+                "Run2Vn.C": "cpp",
+                "DrawVn4eta.C": "cpp"
         }
 }
