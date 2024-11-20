@@ -1,26 +1,23 @@
+#include "../include/1d2d_constants.h"
+
 void makeBkg_for_highMult_jets(){
     gRandom->SetSeed(0);
-    //int trackbinbounds[5]= {76,78,80,81,82};
     int ptbinbounds[2]={3,5};
-    const int   trackbinbounds[10]         = { 0,20,30,40,50,59,66,76,83,78};
-    const int   trackbinboundsUpper[10]    = {20,30,40,50,59,66,76,83,1000,1000};
-    int trackbin =10;
-    int ptbin=2;
 
-    TH2D* hSignal[10][2];//Ntrk,pt
-    TH2D* hBckrndShiftedCor[10][2];
-    TH2D* hEPDrawCor[10][2];
+    TH2D* hSignal[trackbin][2];//Ntrk,pt
+    TH2D* hBckrndShiftedCor[trackbin][2];
+    TH2D* hEPDrawCor[trackbin][2];
     TH2D* hPairs;
     TH1D* hJetPass;
     //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/ana_run3.root","READ");
     //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/output_parkersbin.root","READ");
     //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/ana_run3_allNch.root","READ");
-    TFile* f= new TFile("../Dokumente/ana_run2_allNch_MC.root","READ");
+    TFile* f= new TFile("../Dokumente/ana_Run2_3bins.root","READ");
 
     hPairs=(TH2D*)f->Get("hPairs");
     hJetPass = (TH1D*)f->Get("hJet_Pass550");
     
-    for(int i=0;i<10;i++){
+    for(int i=0;i<trackbin;i++){
         for(int j=0;j<2;j++){
             hSignal[i][j]=(TH2D*)f->Get(Form("hSigS_Cor_%d_to_%d_and_%d_to_30_w_PU_1",trackbinbounds[i],trackbinboundsUpper[i],ptbinbounds[j]));
             hSignal[i][j]->SetName(Form("hSigS_Cor_%d_to_%d_and_%d_to_30_w_PU_1",trackbinbounds[i],trackbinboundsUpper[i],ptbinbounds[j]));
@@ -75,9 +72,9 @@ void makeBkg_for_highMult_jets(){
     }
 
     //TFile* fout= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/output_parkersbin_newBkg_for_high_Nch.root","RECREATE");
-    TFile* fout= new TFile("../Dokumente/ana_run2_allNch_MC_newBkg_for_high_Nch.root","RECREATE");
+    TFile* fout= new TFile("../Dokumente/ana_Run2_3bins_newBkg_for_high_Nch.root","RECREATE");
     
-    for(int i=0;i<10;i++){
+    for(int i=0;i<trackbin;i++){
         for(int j=0;j<2;j++){
             hBckrndShiftedCor[i][j]->Write();
             hSignal[i][j]->Write();

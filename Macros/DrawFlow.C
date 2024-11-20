@@ -9,14 +9,14 @@ void DrawFlow(){
     //TFile* f_bkg= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/Bkg_highMult_jets_run3.root","READ");
     //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/new_default_complete_vn.root","READ");
     //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/ana_run3_allNch.root","READ");
-    TFile* f= new TFile("../Dokumente/ana_run3_allNch_2024_Jet275_newCut_newBkg_for_high_Nch.root","READ");
+    TFile* f= new TFile("../Dokumente/ana_Run2_80bin_newBkg_for_high_Nch.root","READ");
     //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/output_parkersbin.root","READ");
     //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/output_parkersbin_newBkg_for_high_Nch.root","READ");
     
     //int   trackbinbounds[5]= {76,78,80,81,82};
     int ptbinbounds[2]={3,5};
-    const int   trackbinbounds[10]         = { 0,20,30,40,50,59,66,76,83,78};
-    const int   trackbinboundsUpper[10]    = {20,30,40,50,59,66,76,83,1000,1000};
+    const int   trackbinbounds[10]         = { 0,20,30,40,50,59,66,76,80,76};
+    const int   trackbinboundsUpper[10]    = {20,30,40,50,59,66,76,80,1000,1000};
     
     float ptname[2]={0.3,0.5};
     int YPlo=28;
@@ -48,14 +48,14 @@ void DrawFlow(){
             histfit1->Scale(hBkg[i][j]->GetMaximum());
 
             h1DFlow[i][j]=(TH1D*)histfit1->Clone(); 
-            std::string function = "[0]/(TMath::Pi()*2)*(1+2*([1]*TMath::Cos(x)+[2]*TMath::Cos(2*x)+[3]*TMath::Cos(3*x)+[4]*TMath::Cos(4*x)+[5]*TMath::Cos(5*x)))";
+            std::string function = "[0]/(TMath::Pi()*2)*(1+2*([1]*TMath::Cos(x)+[2]*TMath::Cos(2*x)+[3]*TMath::Cos(3*x)))";//+[4]*TMath::Cos(4*x)+[5]*TMath::Cos(5*x)))";
             TF1 func1("deltaPhi1", function.c_str(), -0.5*TMath::Pi(), 1.5*TMath::Pi());
             func1.SetParameter(0, histfit1->GetMaximum());
             func1.SetParameter(1, 0.1);
             func1.SetParameter(2, 0.1);
             func1.SetParameter(3, 0.1);
-            func1.SetParameter(4, 0.1);
-            func1.SetParameter(5, 0.1);
+            // func1.SetParameter(4, 0.1);
+            // func1.SetParameter(5, 0.1);
             h1DFlow[i][j]->Fit(&func1, "m E q");
             
             // Set the histogram title
@@ -73,7 +73,7 @@ void DrawFlow(){
             h1DFlow[i][j]->Draw();
         }
     } 
-    c1->SaveAs("../Figuren/1DFlow/Flow_run3_allNch_2024_Jet275_newCut_1.pdf");
+    c1->SaveAs("../Figuren/1DFlow/Flow_Run2_80bin_1.pdf");
     //c1->SaveAs("/Users/xl155/Documents/JetFlow_Run3_data/Flow_run2_unc_new.pdf(");
 
     TCanvas *c2 = new TCanvas("canvas", "Fourier Series Fits", 800, 1200);
@@ -84,7 +84,7 @@ void DrawFlow(){
             h1DFlow[i+5][j]->Draw();
         }
     } 
-    c2->SaveAs("../Figuren/1DFlow/Flow_run3_allNch_2024_Jet275_newCut_2.pdf)");
+    c2->SaveAs("../Figuren/1DFlow/Flow_Run2_80bin_2.pdf)");
     //c2->SaveAs("/Users/xl155/Documents/JetFlow_Run3_data/Flow_run2_unc_new.pdf)");
     
     

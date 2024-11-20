@@ -8,15 +8,15 @@ void DrawVn_9b(TString era = "22C"){
 
     //TFile *f = new TFile("../Dokumente/ana_run3_allNch_20" + era + "_newBkg_for_high_Nch.root", "READ");
     //TFile *fstat = new TFile("../Dokumente/ana_run3_allNch_20" + era + ".root", "READ");
-    TFile *f = new TFile("../Dokumente/output_run2_parkersbin_newBkg_for_high_Nch.root", "READ");
-    TFile *fstat = new TFile("../Dokumente/output_run2_parkersbin.root", "READ");
-    //TFile *f = new TFile("../Dokumente/ana_run2_allNch_MC_newBkg_for_high_Nch.root", "READ");
-    //TFile *fstat = new TFile("../Dokumente/ana_run2_allNch_MC.root", "READ");
+    //TFile *f = new TFile("../Dokumente/output_run2_parkersbin_newBkg_for_high_Nch.root", "READ");
+    //TFile *fstat = new TFile("../Dokumente/output_run2_parkersbin.root", "READ");
+    TFile *f = new TFile("../Dokumente/ana_Run2_80bin_newBkg_for_high_Nch.root", "READ");
+    TFile *fstat = new TFile("../Dokumente/ana_Run2_80bin.root", "READ");
 
     //int   trackbinbounds[5]= {76,78,80,81,82};
     int ptbinbounds[2]={3,5};
-    const int   trackbinbounds[9]         = { 0,20,30,40,50,59,66,76,83};
-    const int   trackbinboundsUpper[9]    = {20,30,40,50,59,66,76,83,1000};
+    const int   trackbinbounds[9]         = { 0,20,30,40,50,59,66,76,80};
+    const int   trackbinboundsUpper[9]    = {20,30,40,50,59,66,76,80,1000};
     
     float ptname[2]={0.3,0.5};
     int YPlo=28;
@@ -31,7 +31,7 @@ void DrawVn_9b(TString era = "22C"){
 
     //for(int i=0;i<5;i++){
     for(int i=0;i<9;i++){
-        hBinDist[i]=(TH1D*)fstat->Get(Form("hBinDist_unc_%d",i+1)); 
+        hBinDist[i]=(TH1D*)fstat->Get(Form("hBinDist_cor_%d",i+1)); 
         mAve_Nch[i]=hBinDist[i]->GetMean();
         mAve_Nch_err[i]=0.0;
 
@@ -57,14 +57,14 @@ void DrawVn_9b(TString era = "22C"){
             histfit1->Scale(hBkg[i][j]->GetMaximum());
 
             h1DFlow[i][j]=(TH1D*)histfit1->Clone(); 
-            std::string function = "[0]/(TMath::Pi()*2)*(1+2*([1]*TMath::Cos(x)+[2]*TMath::Cos(2*x)+[3]*TMath::Cos(3*x)+[4]*TMath::Cos(4*x)+[5]*TMath::Cos(5*x)))";
+            std::string function = "[0]/(TMath::Pi()*2)*(1+2*([1]*TMath::Cos(x)+[2]*TMath::Cos(2*x)+[3]*TMath::Cos(3*x)))";//+[4]*TMath::Cos(4*x)+[5]*TMath::Cos(5*x)))";
             TF1 func1("deltaPhi1", function.c_str(), -0.5*TMath::Pi(), 1.5*TMath::Pi());
             func1.SetParameter(0, histfit1->GetMaximum());
             func1.SetParameter(1, 0.1);
             func1.SetParameter(2, 0.1);
             func1.SetParameter(3, 0.1);
-            func1.SetParameter(4, 0.1);
-            func1.SetParameter(5, 0.1);
+            // func1.SetParameter(4, 0.1);
+            // func1.SetParameter(5, 0.1);
             h1DFlow[i][j]->Fit(&func1, "m E q");
 
             for(int ip=0;ip<5;ip++){
@@ -98,7 +98,7 @@ void DrawVn_9b(TString era = "22C"){
     leg->AddEntry(gVn[0][1], "n=2");
     leg->AddEntry(gVn[0][2], "n=3");
 
-    TLine* l1=new TLine(9.0,0.0,90.0,0.0);
+    TLine* l1=new TLine(13.0,0.0,102.0,0.0);
     TCanvas* cVn=new TCanvas("cVn","cVn",600,500);
     gVn[0][1]->Draw("AP");
     gVn[0][1]->SetTitle("Run 2");
@@ -112,13 +112,14 @@ void DrawVn_9b(TString era = "22C"){
     gVn[0][2]->Draw("P");
     l1->Draw("same");
     leg->Draw("same");
-    cVn->SaveAs("../Figuren/Vn/Vn_vs_Nch_20" + era + ".pdf");
+    cVn->SaveAs("../Figuren/Vn/Vn_vs_Nch_Run2_80bin.pdf");
+    // cVn->SaveAs("../Figuren/Vn/Vn_vs_Nch_20" + era + ".pdf");
 
-    TFile *fOut = new TFile("../Results/Vn/Vn_vs_Nch_20" + era + ".root", "recreate");
-    gVn[0][0]->Write("V1");
-    gVn[0][1]->Write("V2");
-    gVn[0][2]->Write("V3");
-    fOut->Close();
+    //TFile *fOut = new TFile("../Results/Vn/Vn_vs_Nch_20" + era + ".root", "recreate");
+    //gVn[0][0]->Write("V1");
+    //gVn[0][1]->Write("V2");
+    //gVn[0][2]->Write("V3");
+    //fOut->Close();
 
     /* 
     TCanvas *c1 = new TCanvas("canvas", "Fourier Series Fits", 800, 1200);

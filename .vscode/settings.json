@@ -12,6 +12,7 @@
                 "TGEtoCanvas.C": "cpp",
                 "Vn.C": "cpp",
                 "Run2Vn.C": "cpp",
-                "DrawVn4eta.C": "cpp"
+                "DrawVn4eta.C": "cpp",
+                "makeBkg_for_highMult_jets.C": "cpp"
         }
 }

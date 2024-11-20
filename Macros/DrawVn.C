@@ -1,10 +1,11 @@
 #include "../include/headers.h"
+#include "../include/1d2d_constants.h"
 
 void DrawVn(TString era = "22C"){
-    TH2D* hSignal[10][2];//Ntrk,pt
-    TH2D* hBkg[10][2];
-    TH1D* h1DFlow[10][2];
-    TH1D* hBinDist[10];
+    TH2D* hSignal[trackbin][2];//Ntrk,pt
+    TH2D* hBkg[trackbin][2];
+    TH1D* h1DFlow[trackbin][2];
+    TH1D* hBinDist[trackbin];
 
     //TFile *f = new TFile("../Dokumente/ana_run3_allNch_20" + era + "_newBkg_for_high_Nch.root", "READ");
     //TFile *fstat = new TFile("../Dokumente/ana_run3_allNch_20" + era + ".root", "READ");
@@ -15,8 +16,6 @@ void DrawVn(TString era = "22C"){
 
     //int   trackbinbounds[5]= {76,78,80,81,82};
     int ptbinbounds[2]={3,5};
-    const int   trackbinbounds[10]         = { 0,20,30,40,50,59,66,76,83,76};
-    const int   trackbinboundsUpper[10]    = {20,30,40,50,59,66,76,83,1000,1000};
     
     float ptname[2]={0.3,0.5};
     int YPlo=28;
@@ -24,13 +23,13 @@ void DrawVn(TString era = "22C"){
     TH1D* hJetPass = (TH1D*)f->Get("hJet_Pass550");
     //TH1D* hJetPass = (TH1D*)f->Get("hJet_Pass550_hltCor");
     
-    double mAve_Nch[10];
-    double mAve_Nch_err[10];
-    double mFit_par[2][5][10];
-    double mFit_par_err[2][5][10];
+    double mAve_Nch[trackbin];
+    double mAve_Nch_err[trackbin];
+    double mFit_par[2][5][trackbin];
+    double mFit_par_err[2][5][trackbin];
 
     //for(int i=0;i<5;i++){
-    for(int i=0;i<10;i++){
+    for(int i=0;i<trackbin;i++){
         hBinDist[i]=(TH1D*)fstat->Get(Form("hBinDist_cor_%d",i+1)); 
         mAve_Nch[i]=hBinDist[i]->GetMean();
         mAve_Nch_err[i]=0.0;
@@ -57,14 +56,14 @@ void DrawVn(TString era = "22C"){
             histfit1->Scale(hBkg[i][j]->GetMaximum());
 
             h1DFlow[i][j]=(TH1D*)histfit1->Clone(); 
-            std::string function = "[0]/(TMath::Pi()*2)*(1+2*([1]*TMath::Cos(x)+[2]*TMath::Cos(2*x)+[3]*TMath::Cos(3*x)+[4]*TMath::Cos(4*x)+[5]*TMath::Cos(5*x)))";
+            std::string function = "[0]/(TMath::Pi()*2)*(1+2*([1]*TMath::Cos(x)+[2]*TMath::Cos(2*x)+[3]*TMath::Cos(3*x)))"//+[4]*TMath::Cos(4*x)+[5]*TMath::Cos(5*x)))";
             TF1 func1("deltaPhi1", function.c_str(), -0.5*TMath::Pi(), 1.5*TMath::Pi());
             func1.SetParameter(0, histfit1->GetMaximum());
             func1.SetParameter(1, 0.1);
             func1.SetParameter(2, 0.1);
             func1.SetParameter(3, 0.1);
-            func1.SetParameter(4, 0.1);
-            func1.SetParameter(5, 0.1);
+            // func1.SetParameter(4, 0.1);
+            // func1.SetParameter(5, 0.1);
             h1DFlow[i][j]->Fit(&func1, "m E q");
 
             for(int ip=0;ip<5;ip++){
@@ -85,7 +84,7 @@ void DrawVn(TString era = "22C"){
     TGraphErrors* gVn[2][5];
     for(int j=0;j<2;j++){
         for(int ip=0;ip<5;ip++){
-            gVn[j][ip]=new TGraphErrors(10,mAve_Nch,mFit_par[j][ip],mAve_Nch_err,mFit_par_err[j][ip]);
+            gVn[j][ip]=new TGraphErrors(trackbin,mAve_Nch,mFit_par[j][ip],mAve_Nch_err,mFit_par_err[j][ip]);
             gVn[j][ip]->SetMarkerStyle(20);
             gVn[j][ip]->SetMarkerSize(0.8);
             gVn[j][ip]->SetLineColor(color[ip]);
@@ -112,14 +111,14 @@ void DrawVn(TString era = "22C"){
     gVn[0][2]->Draw("P");
     l1->Draw("same");
     leg->Draw("same");
-    cVn->SaveAs("../Figuren/Vn/Vn_vs_Nch_20" + era + ".pdf");
-    cVn->SaveAs("../Figuren/Vn/Vn_vs_Nch_20" + era + ".png");
+    cVn->SaveAs("../Figuren/Vn/Vn_vs_Nch_Run2_3bins.pdf");
+    cVn->SaveAs("../Figuren/Vn/Vn_vs_Nch_Run2_3bins.png");
 
-    TFile *fOut = new TFile("../Results/Vn/Vn_vs_Nch_20" + era + ".root", "recreate");
-    gVn[0][0]->Write("V1");
-    gVn[0][1]->Write("V2");
-    gVn[0][2]->Write("V3");
-    fOut->Close();
+    //TFile *fOut = new TFile("../Results/Vn/Vn_vs_Nch_Run2_3bins.root", "recreate");
+    //gVn[0][0]->Write("V1");
+    //gVn[0][1]->Write("V2");
+    //gVn[0][2]->Write("V3");
+    //fOut->Close();
 
     /* 
     TCanvas *c1 = new TCanvas("canvas", "Fourier Series Fits", 800, 1200);
