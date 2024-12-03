@@ -12,7 +12,10 @@ void makeBkg_for_highMult_jets(){
     //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/ana_run3.root","READ");
     //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/output_parkersbin.root","READ");
     //TFile* f= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/ana_run3_allNch.root","READ");
-    TFile* f= new TFile("../Dokumente/ana_Run2_3bins.root","READ");
+    //TFile* f= new TFile("../Dokumente/ana_run3_hlt500_highnch.root","READ");
+    //TFile* f= new TFile("../Dokumente/ana_Run2_83bin.root","READ");
+    //TFile* f= new TFile("../Dokumente/ana_run2_allNch_MC.root","READ");
+    TFile* f= new TFile("../Dokumente/new_default_complete_vn.root","READ");
 
     hPairs=(TH2D*)f->Get("hPairs");
     hJetPass = (TH1D*)f->Get("hJet_Pass550");
@@ -33,7 +36,7 @@ void makeBkg_for_highMult_jets(){
     int backMult =10;
     for(int wtrk = 7; wtrk < trackbin+1; wtrk++){
         std::cout << wtrk << "/" << trackbin << std::endl;
-        for(int wppt = 1; wppt < ptbin+1; wppt++){ 
+        for(int wppt = 1; wppt < 3; wppt++){ 
             std::cout << wppt << "/" << ptbin << std::endl;
             //Nent is the number of pairs in the signal which we will try to 10x
             //Xent is the number of pseudoparticles requried such that when we build the pairs nCp = Xent CHOOSE 2 will give 
@@ -72,7 +75,7 @@ void makeBkg_for_highMult_jets(){
     }
 
     //TFile* fout= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/output_parkersbin_newBkg_for_high_Nch.root","RECREATE");
-    TFile* fout= new TFile("../Dokumente/ana_Run2_3bins_newBkg_for_high_Nch.root","RECREATE");
+    TFile* fout= new TFile("../Dokumente/new_default_complete_vn_newBkg_for_high_Nch.root","RECREATE");
     
     for(int i=0;i<trackbin;i++){
         for(int j=0;j<2;j++){

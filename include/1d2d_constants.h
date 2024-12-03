@@ -1,5 +1,5 @@
 //const int   trackbin                    = 5;
-const int   trackbin                    = 8;
+const int   trackbin                    = 9;
 //const int   ptbin                       = 5;
 const int   ptbin                       = 3;
 const float ptmin                       = 0.0;
@@ -7,14 +7,17 @@ const float ptmax                       = 1000.0;
 
 const int mm = 1000;
 
-//const int   trackbinbounds[trackbin]         = { 0,20,30,40,50,59,66,76,83,76};
+//const int   trackbinbounds[trackbin]         = { 0,20,30,40,50,59,66,76,83,78};
 //const int   trackbinboundsUpper[trackbin]    = {20,30,40,50,59,66,76,83,mm,mm};
+
+const int   trackbinbounds[trackbin]         = { 0,20,30,40,50,59,66,76,83};
+const int   trackbinboundsUpper[trackbin]    = {20,30,40,50,59,66,76,83,mm};
 
 //const int   trackbinbounds[trackbin]         = { 0,20,30,40,50,59,66,76,80,76};
 //const int   trackbinboundsUpper[trackbin]    = {20,30,40,50,59,66,76,80,mm,mm};
 
-const int   trackbinbounds[trackbin]         = {66,69,76,80,76,81,76,82};
-const int   trackbinboundsUpper[trackbin]    = {69,76,80,mm,81,mm,82,mm};
+//const int   trackbinbounds[trackbin]         = {66,69,76,80,76,81,76,82};
+//const int   trackbinboundsUpper[trackbin]    = {69,76,80,mm,81,mm,82,mm};
 
 //const int   trackbinbounds[trackbin]         = {76,78,80,81,82};
 //const int   trackbinboundsUpper[trackbin]    = {mm,mm,mm,mm,mm};
