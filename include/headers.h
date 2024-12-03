@@ -32,6 +32,7 @@
 #include "TGraphAsymmErrors.h"
 #include "TGraph2D.h"
 #include "TGraph2DErrors.h"
+#include "TMultiGraph.h"
 #include "TDatabasePDG.h"
 #include "TParticlePDG.h"
 #include "TPaletteAxis.h"

@@ -18,7 +18,7 @@ void VnvsEta(){
     int ptbinbounds[2]={3,5};
     float ptname[2]={0.3,0.5};
     const int detabins = 5;
-    double detacuts[detabins] = {1.8, 2.0, 2.2, 2.4, 2.6};
+    double detacuts[detabins] = {1.4, 1.7, 2.0, 2.3, 2.6};
     int YPhi=34; //4.0
     TH1D* hJetPass = (TH1D*)f->Get("hJet_Pass550");
     //TH1D* hJetPass = (TH1D*)f->Get("hJet_Pass550_hltCor");
@@ -84,12 +84,11 @@ void VnvsEta(){
                     {
                         v2[j][i][n] = sqrt(mFit_par[j][1][i][n]);
                         v2_err[j][i][n] = mFit_par_err[j][1][i][n] / v2[j][i][n] / 2;
-                        /*
-                        if (j == 0)
-                            cout << "v2: " << v2[j][i] << endl;
-                        if (j == 0)
-                            cout << "v2_err: " << v2_err[j][i] << endl;
-                        */
+                        
+                        //if (j == 0 && n==(detabins-1))
+                        //    cout << "v2: " << v2[j][i][n] << endl;
+                        //if (j == 0)
+                        //    cout << "v2_err: " << v2_err[j][i] << endl;
                     }
                 }
 
@@ -100,81 +99,48 @@ void VnvsEta(){
         }
     }
 
-    int color[5] = {632, 419, 600, 800, 616};
+    int Farben[trackbin] = {401, 432, 418, 800, 2, 4, 616, 1, 797};
 
-    TGraphErrors *gVn[2][3];
-    TGraphErrors *gv2[2];
+    TGraphErrors *gv2[2][trackbin];
+    TMultiGraph *mg1 = new TMultiGraph();
+    TMultiGraph *mg2 = new TMultiGraph();
+    TLegend *leg = new TLegend(.7, .15, .85, .35, "");
+    TCanvas *cKuchen = new TCanvas("cKuchen", "", 0, 0, 1600, 1200);
+    cKuchen->Divide(3, 3, 0, 0);
     for (int j = 0; j < 2; j++)
     {
-        for (int ip = 0; ip < 3; ip++)
+        for (int i = 0; i < trackbin;i++)
         {
-            gVn[j][ip] = new TGraphErrors(trackbin, mAve_Nch, mFit_par[j][ip], mAve_Nch_err, mFit_par_err[j][ip]);
-            gVn[j][ip]->SetMarkerStyle(20);
-            gVn[j][ip]->SetMarkerSize(0.8);
-            gVn[j][ip]->SetLineColor(color[ip]);
-            gVn[j][ip]->SetMarkerColor(color[ip]);
+            gv2[j][i] = new TGraphErrors(detabins, detacuts, v2[j][i], nullptr, v2_err[j][i]);
+            gv2[j][i]->SetMarkerColor(Farben[i]);
+            gv2[j][i]->SetLineColor(Farben[i]);
+            gv2[j][i]->SetTitle(";#Delta#eta*;v_{2}");
 
-            if (ip == 1)
+            if (j == 0)
             {
-                gv2[j] = new TGraphErrors(trackbin, mAve_Nch, v2[j], mAve_Nch_err, v2_err[j]);
-                gv2[j]->SetMarkerStyle(20);
-                gv2[j]->SetMarkerSize(0.8);
+                mg1->Add(gv2[0][i], "P");
+                leg->AddEntry(gv2[0][i], Form("%d < N_{ch} < %d", trackbinbounds[i], trackbinboundsUpper[i]));
+                cKuchen->cd(i + 1);
+                gv2[0][i]->Draw("ap");
+                TLatex text;
+                text.SetTextAlign(33);
+                text.DrawLatexNDC(0.8, 0.9, Form("%d < N_{ch} < %d", trackbinbounds[i], trackbinboundsUpper[i]));
             }
+            else
+                mg2->Add(gv2[1][i], "P");
         }
-        }
-
-        TLegend *leg = new TLegend(.7, .15, .85, .35, "");
-        leg->AddEntry(gVn[0][0], "n=1");
-        leg->AddEntry(gVn[0][1], "n=2");
-        leg->AddEntry(gVn[0][2], "n=3");
-
-        TLine *l1 = new TLine(12.0, 0.0, 103.0, 0.0);
-        TCanvas *cVn = new TCanvas("cVn", "cVn", 600, 500);
-        gVn[0][1]->Draw("AP");
-        gVn[0][1]->SetTitle("Run 2");
-        gVn[0][1]->GetXaxis()->SetTitle("N_{ch}^{j}");
-        // gVn[0][1]->GetXaxis()->SetRange(5,95);
-        gVn[0][1]->GetYaxis()->SetTitle("V^{*}_{n#Delta}{2,|#Delta#eta^{*}|>2}");
-        gVn[0][1]->GetYaxis()->SetTitleOffset(1.2);
-        gVn[0][1]->SetMaximum(0.1);
-        gVn[0][1]->SetMinimum(-0.27);
-        gVn[0][0]->Draw("P");
-        gVn[0][2]->Draw("P");
-        l1->Draw("same");
-        leg->Draw("same");
-        // cVn->SaveAs("../Figuren/Vn/Vn_vs_Nch_Run2_83bin.pdf");
-        // cVn->SaveAs("../Figuren/Vn/Vn_vs_Nch_Run2_83bin.png");
-
-        TFile *fOut = new TFile("../Results/Vn/Vn_vs_Nch_Run2_83bin.root", "recreate");
-        gVn[0][0]->Write("V1");
-        gVn[0][1]->Write("V2");
-        gVn[0][2]->Write("V3");
-        gv2[0]->Write("v2");
-        fOut->Close();
-
-        /*
-        TCanvas *c1 = new TCanvas("canvas", "Fourier Series Fits", 800, 1200);
-        c1->Divide(2, 5); // Divide canvas into 2 columns and 5 rows
-        for(int i=0;i<5;i++){
-            for(int j=0;j<2;j++){
-                c1->cd(i*2+j+1);
-                h1DFlow[i][j]->Draw();
-            }
-        }
-        c1->SaveAs("/Users/xl155/Documents/JetFlow_Run3_data/Flow_run3_allNch_2023_2024.pdf(");
-        //c1->SaveAs("/Users/xl155/Documents/JetFlow_Run3_data/Flow_run2_unc_new.pdf(");
-
-        TCanvas *c2 = new TCanvas("canvas", "Fourier Series Fits", 800, 1200);
-        c2->Divide(2, 5); // Divide canvas into 2 columns and 5 rows
-        for(int i=0;i<5;i++){
-            for(int j=0;j<2;j++){
-                c2->cd(i*2+j+1);
-                h1DFlow[i+5][j]->Draw();
-            }
-        }
-        c2->SaveAs("/Users/xl155/Documents/JetFlow_Run3_data/Flow_run3_allNch_2023_2024.pdf)");
-        //c2->SaveAs("/Users/xl155/Documents/JetFlow_Run3_data/Flow_run2_unc_new.pdf)");
-        */
-        f->Close();
-        delete f;
     }
+    cKuchen->SaveAs("Kuchen0p3.png");
+
+    TCanvas *c1 = new TCanvas("c1", "", 0, 0, 800, 600);
+    mg1->SetTitle(";#Delta#eta*;v_{2}");
+    mg1->Draw("A");
+    leg->Draw("same");
+    c1->SaveAs("v2_vs_deta_0p3.png");
+
+    TCanvas *c2 = new TCanvas("c2", "", 0, 0, 800, 600);
+    mg2->SetTitle(";#Delta#eta*;v_{2}");
+    mg2->Draw("A");
+    leg->Draw("same");
+    c2->SaveAs("v2_vs_deta_0p5.png");
+}

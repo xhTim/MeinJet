@@ -10,8 +10,8 @@ const int mm = 1000;
 //const int   trackbinbounds[trackbin]         = { 0,20,30,40,50,59,66,76,83,78};
 //const int   trackbinboundsUpper[trackbin]    = {20,30,40,50,59,66,76,83,mm,mm};
 
-const int   trackbinbounds[trackbin]         = { 0,20,30,40,50,59,66,76,83};
-const int   trackbinboundsUpper[trackbin]    = {20,30,40,50,59,66,76,83,mm};
+const int   trackbinbounds[trackbin]         = { 0,20,30,40,50,59,66,76,80};
+const int   trackbinboundsUpper[trackbin]    = {20,30,40,50,59,66,76,80,mm};
 
 //const int   trackbinbounds[trackbin]         = { 0,20,30,40,50,59,66,76,80,76};
 //const int   trackbinboundsUpper[trackbin]    = {20,30,40,50,59,66,76,80,mm,mm};
