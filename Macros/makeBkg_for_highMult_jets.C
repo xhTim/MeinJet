@@ -15,7 +15,7 @@ void makeBkg_for_highMult_jets(){
     //TFile* f= new TFile("../Dokumente/ana_run3_hlt500_highnch.root","READ");
     //TFile* f= new TFile("../Dokumente/ana_Run2_83bin.root","READ");
     //TFile* f= new TFile("../Dokumente/ana_run2_allNch_MC.root","READ");
-    TFile* f= new TFile("../Dokumente/new_default_complete_vn.root","READ");
+    TFile* f= new TFile("/home/tk/MeinJet/Dokumente/ana_Run2_gebrocheneKlassen.root","READ");
 
     hPairs=(TH2D*)f->Get("hPairs");
     hJetPass = (TH1D*)f->Get("hJet_Pass550");
@@ -27,14 +27,14 @@ void makeBkg_for_highMult_jets(){
             hEPDrawCor[i][j]=(TH2D*)f->Get(Form("hEPD_Cor_%d_to_%d_and_%d_to_30_w_PU_1",trackbinbounds[i],trackbinboundsUpper[i],ptbinbounds[j]));
             hBckrndShiftedCor[i][j]=(TH2D*)f->Get(Form("hBckS_Cor_%d_to_%d_and_%d_to_30_w_PU_1",trackbinbounds[i],trackbinboundsUpper[i],ptbinbounds[j]));
             hBckrndShiftedCor[i][j]->SetName(Form("hBckS_Cor_%d_to_%d_and_%d_to_30_w_PU_1",trackbinbounds[i],trackbinboundsUpper[i],ptbinbounds[j]));
-            if(i>5){
+            if(i>6){
                 hBckrndShiftedCor[i][j]->Reset();
             }
         }
     }
     
     int backMult =10;
-    for(int wtrk = 7; wtrk < trackbin+1; wtrk++){
+    for(int wtrk = 8; wtrk < trackbin+1; wtrk++){
         std::cout << wtrk << "/" << trackbin << std::endl;
         for(int wppt = 1; wppt < 3; wppt++){ 
             std::cout << wppt << "/" << ptbin << std::endl;
@@ -75,7 +75,7 @@ void makeBkg_for_highMult_jets(){
     }
 
     //TFile* fout= new TFile("/Users/xl155/Documents/JetFlow_Run3_data/output_parkersbin_newBkg_for_high_Nch.root","RECREATE");
-    TFile* fout= new TFile("../Dokumente/new_default_complete_vn_newBkg_for_high_Nch.root","RECREATE");
+    TFile* fout= new TFile("/home/tk/MeinJet/Dokumente/ana_Run2_gebrocheneKlassen_newBkg_for_high_Nch.root","RECREATE");
     
     for(int i=0;i<trackbin;i++){
         for(int j=0;j<2;j++){

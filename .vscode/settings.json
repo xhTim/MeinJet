@@ -15,6 +15,7 @@
                 "DrawVn4eta.C": "cpp",
                 "makeBkg_for_highMult_jets.C": "cpp",
                 "neueBinsProbier.C": "cpp",
-                "VnvsEta.C": "cpp"
+                "VnvsEta.C": "cpp",
+                "v2vsEta.C": "cpp"
         }
 }
